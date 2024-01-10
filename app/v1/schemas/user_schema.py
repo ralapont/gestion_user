@@ -1,0 +1,45 @@
+from typing import Optional
+from pydantic import BaseModel
+from pydantic import Field
+from pydantic import EmailStr
+
+
+class UserBase(BaseModel):
+    correo: EmailStr = Field(
+        ...,
+        example="myemail@cosasdedevs.com"
+    )
+    username: str = Field(
+        ...,
+        min_length=3,
+        max_length=20,
+        example="MyTypicalUsername"
+    )
+    direccion:  Optional[str] = Field(
+        None,
+        min_length=3,
+        max_length=150,
+        example="MyTipicalDirection"
+    )
+    telefono:  Optional[str] = Field(
+        None,
+        min_length=3,
+        max_length=9,
+        example="999999999"
+    )
+
+
+class User(UserBase):
+    id: int = Field(
+        ...,
+        example="5"
+    )
+
+
+class UserRegister(UserBase):
+    password: str = Field(
+        ...,
+        min_length=8,
+        max_length=20,
+        example="strongpass"
+    )
