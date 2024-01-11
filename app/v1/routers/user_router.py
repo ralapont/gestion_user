@@ -15,10 +15,18 @@ from app.v1.schemas.token_schema import Token
 from app.v1.utils.db import get_db
 
 
-router = APIRouter(prefix="/api/v1", tags=["users"])
+router = APIRouter(prefix="/api/v1/user", tags=["users"])
+
+@router.options(
+    "",
+    tags=["users"],
+    status_code=status.HTTP_200_OK,      
+)
+def valida_options():
+    return { 'msg': 'Task has been deleted successfully' }
 
 @router.post(
-    "/user/",
+    "",
     tags=["users"],
     status_code=status.HTTP_201_CREATED,
     response_model=user_schema.User,
@@ -40,6 +48,7 @@ def create_user(user: user_schema.UserRegister = Body(...)):
     ### Returns
     - user: User info
     """
+    print('user: {}'.format(user))
     return user_service.create_user(user)
 
 @router.post(
@@ -63,7 +72,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return Token(access_token=access_token, token_type="bearer")
 
 @router.get(
-    "/",
+    "",
     tags=["users"],
     status_code=status.HTTP_200_OK,
     response_model=List[user_schema.User],
