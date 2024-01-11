@@ -9,7 +9,6 @@ from app.v1.service.auth_service import get_password_hash
 
 def create_user(user: user_schema.UserRegister):
 
-    print('user: {}'.format(user))
     get_user = UserModel.filter((UserModel.correo == user.correo) | (UserModel.username == user.username)).first()
     if get_user:
         msg = "Email already registered"
