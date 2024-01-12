@@ -22,7 +22,7 @@ router = APIRouter(prefix="/api/v1/user", tags=["users"])
     tags=["users"],
     status_code=status.HTTP_200_OK,      
 )
-def valida_options():
+async def valida_options():
     return { 'msg': 'Task has been deleted successfully' }
 
 @router.post(
@@ -33,7 +33,7 @@ def valida_options():
     dependencies=[Depends(get_db)],
     summary="Create a new user"
 )
-def create_user(user: user_schema.UserRegister = Body(...)):
+async def create_user(user: user_schema.UserRegister = Body(...)):
     """
     ## Create a new user in the app
 
