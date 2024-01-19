@@ -27,14 +27,12 @@ services:
       timeout: 10s
       retries: 5
 
-  gestion-user:
+  gestion-user-container:
+    image: gestion-user-image
+    container_name: gestion-user-container
     build:
       context: ./
       dockerfile: Dockerfile
-    image: 
-      gestion_user-image
-    container_name: 
-      gestion-user-container
     environment:
       - DB_NAME=users
       - DB_USER=postgres
