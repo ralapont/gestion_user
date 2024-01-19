@@ -1,21 +1,55 @@
-version: "3"
+version: "3.8"
 services:
-  panel_admin:
+  server-postgres:
+    image: postgres:16.1
+    container_name: server-postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_DB=users
+    ports:
+      - "5433:5432"
+    networks:
+      - postgres-networks
+    volumes:
+      - type: volume
+        source: postgres-data
+        target: /var/lib/postgresql/data
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./create_tables.sql
+        target: /docker-entrypoint-initdb.d/create_tables.sql
+        read_only: true          
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d postgres" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  gestion-user:
     build:
       context: ./
       dockerfile: Dockerfile
-    env_file:
-      - .env
+    image: 
+      gestion_user-image
+    container_name: 
+      gestion-user-container
+    environment:
+      - DB_NAME=users
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_HOST=server-postgres
+      - DB_PORT=5432
+    depends_on:
+      - server-postgres
     ports:
       - "8010:80"
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '1'
-          memory: 512M
-        reservations:
-          cpus: '1'
-          memory: 512M
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    networks:
+      - postgres-networks
+
+volumes:
+  postgres-data:
+    
+networks:
+  postgres-networks:

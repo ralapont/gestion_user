@@ -22,7 +22,7 @@ Docker
 -- Crear la imagen:
     docker image build --tag gestion-user-image .
 -- Ejecutar contenedor
-    docker container run --publish 8010:80 --name gestion-user-container gestion-user-image
+    docker container run -d --publish 8010:80 --network postgres-network --name gestion-user-container gestion-user-image
 
 Acceso desde el browser
     http://localhost:8010/docs        
