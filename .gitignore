@@ -10,3 +10,4 @@ services/__pycache__/
 utils/__pycache__/
 user-env/
 .pytest_cache
+Vagrantfile
